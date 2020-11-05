@@ -1,17 +1,17 @@
-#simple-nodejs-rest
+# simple-nodejs-rest
 
-##Project setup
+## Project setup
 
 ````
 npm install
 ````
 
-##Compiles
+## Compiles
 
 ```
 node app.js
 ```
 
-##watch on
+## watch on
 
 http://127.0.0.1:7000
