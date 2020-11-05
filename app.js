@@ -1,4 +1,5 @@
 const express = require('express'),
+    cors = require('cors'),
     app = express(),
     bodyParser = require('body-parser'),
     routes = require('./routes/index'),
@@ -22,12 +23,14 @@ app.use((req, res, next) => {
             req.user = JSON.parse(Buffer.from(tokenParts[1], 'base64').toString('utf8'));
     }
 
+    res.set('Access-Control-Allow-Origin', '*')
+
     next();
 });
 
 app.post('/api/auth', (req, res) => {
     for(let user of users){
-        if(req.body.login === user.login && req.body.password === user.password){
+        if(req.query.login === user.login && req.query.password === user.password){
             let head = Buffer.from(JSON.stringify({alg: 'HS256', typ: 'jwt'})).toString('base64');
             let body = Buffer.from(JSON.stringify(user)).toString('base64');
             let signature = crypto.createHmac('SHA256', tokenKey).update(`${head}.${body}`).digest('base64');
