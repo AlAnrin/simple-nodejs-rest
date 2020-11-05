@@ -20,8 +20,6 @@ app.use((req, res, next) => {
 
         if(signature === tokenParts[2])
             req.user = JSON.parse(Buffer.from(tokenParts[1], 'base64').toString('utf8'));
-
-        next();
     }
 
     next();
@@ -47,9 +45,9 @@ app.post('/api/auth', (req, res) => {
 
 app.use('/api', routes);
 
-app.listen(port, host, () => console.log(`Server listens http://${host}:${port}`));
+const server = app.listen(port, host, () => console.log(`Server listens http://${host}:${port}`));
 
-
+server.keepAliveTimeout = 30000;
 
 //
 // const express = require('express');
