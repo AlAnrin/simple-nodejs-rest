@@ -78,8 +78,7 @@ app.post('/rewrite', cors(corsOptions), (req, res) => {
 //     console.log('Created');
 // });
 
-app.options('*', cors(corsOptions))
-app.post('/write', (req, res) => {
+app.put('/write', (req, res) => {
     try{
         const data = req.body;
         console.log(data);
