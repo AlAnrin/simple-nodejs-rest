@@ -15,7 +15,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 app.use((req, res, next) => {
     if(req.headers.authorization){
-        let tokenParts = req.headers.authorization.split(' ')[1].split('.');
+        let tokenParts = req.headers.authorization.split('.');
         let signature = crypto.createHmac('SHA256', tokenKey).update(`${tokenParts[0]}.${tokenParts[1]}`).digest('base64');
 
         if(signature === tokenParts[2])
@@ -29,9 +29,6 @@ app.use((req, res, next) => {
 
 app.post('/api/auth', (req, res) => {
     for(let user of users){
-        console.log(req.body);
-        console.log(req.body.login);
-        console.log(req.body.password);
         if(req.body.login === user.login && req.body.password === user.password){
             let head = Buffer.from(JSON.stringify({alg: 'HS256', typ: 'jwt'})).toString('base64');
             let body = Buffer.from(JSON.stringify(user)).toString('base64');
