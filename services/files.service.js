@@ -1,15 +1,25 @@
 const fs = require('fs');
 
 class FilesService{
-    getFiles(){
-        return new Promise((res, rej) => {
-            fs.readFile('assets/files/data.json', (err, data) => {
-                if(err) {
-                    return res(false);
-                }
-                return res(JSON.parse(data));
-            });
+    getDirectories(path) {
+        return fs.readdirSync(path).filter(function (file) {
+            return fs.statSync(path+'/'+file).isDirectory();
         });
+    }
+    getFiles(path){
+        // return new Promise((res, rej) => {
+            return fs.readdirSync(path).filter(function (file) {
+                return fs.statSync(path+'/'+file).isFile();
+            });
+        // });
+        // return new Promise((res, rej) => {
+        //     fs.readFile('assets/files/data.json', (err, data) => {
+        //         if(err) {
+        //             return res(false);
+        //         }
+        //         return res(JSON.parse(data));
+        //     });
+        // });
     }
 
     createFile(data){

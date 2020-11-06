@@ -9,10 +9,17 @@ const express = require('express'),
 const host = '127.0.0.1';
 const port = 7000;
 
+var corsOptions = {
+    origin: '*',
+    optionsSuccessStatus: 200
+}
+
 const tokenKey = '1a2b-3c4d-5e6f-7g8h';
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+
+app.options('*', cors(corsOptions))
 
 app.use((req, res, next) => {
     if(req.headers.authorization){
@@ -38,6 +45,7 @@ app.post('/api/auth', (req, res) => {
             return res.status(200).json({
                 id: user.id,
                 login: user.login,
+                fio: user.fio,
                 token: `${head}.${body}.${signature}`
             });
         }
