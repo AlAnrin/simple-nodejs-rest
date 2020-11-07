@@ -2,15 +2,23 @@ const FilesService = require('../services/files.service');
 
 class FilesController {
     getFiles(req, res){
-        if(req.query.id){
-            if(req.files.hasOwnProperty(req.query.id))
-                return res.status(200).send({data: req.files[req.query.id]});
-            else
-                return res.status(404).send({message: 'File not found.'});
-        }else if(!req.files)
-            return res.status(404).send({message: 'Files not found.'});
+        if(req.query.dir_id) {
+            const dir = req.directories.find(x => x.id === req.query.dir_id);
+            if (req.query.id) {
+                const file = dir.files.find(x => x.id === req.query.id);
+                if (file) {
+                    const content = FilesService.readFile(`${dir.full}/${dir.path}/${file.path}`);
+                    return res.status(200).send({content: content});
+                } else
+                    return res.status(404).send({message: 'File not found.'});
+            } else {
+                if (!dir)
+                    return res.status(404).send({message: 'Directory not found.'});
 
-        return res.status(200).send({data: req.files});
+                return res.status(200).send({data: dir.files});
+            }
+        }
+        return res.status(404).send({message: 'Directory not found.'});
     }
 
     async createFile(req, res){

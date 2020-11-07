@@ -1,7 +1,7 @@
 const express = require("express"),
-    router = express.Router(),
-    fileRoutes = require("./file.routes");
+    router = express.Router()
+    dirsRoutes = require("./dirs.routes");
 
-router.use('/files', fileRoutes);
+router.use('/dirs', dirsRoutes)
 
 module.exports = router;
