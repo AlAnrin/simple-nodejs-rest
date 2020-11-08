@@ -39,20 +39,7 @@ class FilesController {
     }
 
     async updateFile(req, res){
-        if(req.body.file && req.body.file.id){
-            if(!req.files.hasOwnProperty(req.body.file.id))
-                return res.status(404).send({message: 'file not found.'});
 
-            req.files[req.body.file.id] = req.body.file;
-
-            let result = await FilesService.updateFile(req.files);
-
-            if(result)
-                return res.status(200).send(result);
-            else
-                return res.status(500).send({message: 'Unable update file.'});
-        }else
-            return res.status(400).send({message: 'Bad request.'});
     }
 
     async deleteFile(req, res){

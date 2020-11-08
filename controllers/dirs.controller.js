@@ -9,7 +9,21 @@ class DirsController {
     }
 
     updateDir(req, res) {
-
+        if (req.user && req.directories) {
+            if (req.query.dir) {
+                const dir = req.directories.find(x => x.id === req.query.dir);
+                if (req.body.name) {
+                    try {
+                        fs.renameSync(`${dir.full}/${dir.path}`,
+                            `${dir.full}/${dir.id}_${req.body.name}`)
+                        return res.status(200).send({message: 'Directory renamed.'});
+                    } catch (err) {
+                        return res.status(500).send({message: 'Directory not renamed.'});
+                    }
+                }
+            }
+        } else
+            return res.status(401).json({message: 'Not authorized'});
     }
 
     createDir(req, res) {
