@@ -1,8 +1,8 @@
 const express = require("express"),
     router = express.Router(),
-    FileController = require('../controllers/files.controller'),
     ash = require('express-async-handler'),
-    fileRoutes = require("./file.routes");
+    fileRoutes = require("./file.routes")
+    DirsController = require('../controllers/dirs.controller');
 const fs = require('fs');
 
 function getDirectories(path) {
@@ -52,18 +52,12 @@ router.use(ash(async (req, res, next) => {
         return res.status(401).json({message: 'Not authorized'});
 }));
 
-router.route('/').get((req, res) => {
-    if (req.directories) {
-        return res.status(200).json({data: req.directories})
-    }
-    else
-        return res.status(401).json({message: 'Not authorized'});
-})
+router.route('/')
+    .get(DirsController.getDirs)
+    .post(DirsController.createDir)
+    .put(DirsController.updateDir)
+    .delete(DirsController.deleteDir);
+
 router.use('/files', fileRoutes);
-// router.route('/files')
-//     .get(FileController.getFiles)
-//     .post(FileController.createFile)
-//     .put(FileController.updateFile)
-//     .delete(FileController.deleteFile);
 
 module.exports = router;

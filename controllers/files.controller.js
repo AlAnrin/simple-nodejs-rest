@@ -27,7 +27,7 @@ class FilesController {
             if(!dir)
                 return res.status(404).send({message: 'Error while find directory'});
 
-            const new_id = +dir.files[dir.files.length - 1].id + 1;
+            const new_id = dir.files.length !== 0 ? +dir.files[dir.files.length - 1].id + 1: 0;
             let result = await FilesService.createFile(dir, new_id);
 
             if(result)
