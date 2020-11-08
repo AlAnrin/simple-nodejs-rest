@@ -17,9 +17,10 @@ class FilesService{
         }
     }
 
-    createFile(data){
+    createFile(dir, new_id){
         return new Promise((res, rej) => {
-            fs.writeFile('assets/files/data.json', JSON.stringify(data), (err, response) => {
+            fs.writeFile(`${dir.full}/${dir.path}/${new_id}_new_file.txt`, new Uint8Array(0),
+                (err, response) => {
                 if(err)
                     return res(false);
 
@@ -39,14 +40,14 @@ class FilesService{
         });
     }
 
-    deleteFile(data){
+    deleteFile(dir, file){
         return new Promise((res, rej) => {
-            fs.writeFile('assets/files/data.json', JSON.stringify(data), (err, response) => {
-                if(err)
+            fs.unlink(`${dir.full}/${dir.path}/${file.path}`, err => {
+                if (err)
                     return res(false);
 
                 return res({message: 'File deleted.'});
-            });
+            })
         });
     }
 }

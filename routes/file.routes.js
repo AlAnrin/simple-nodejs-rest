@@ -15,7 +15,8 @@ router.use(ash(async (req, res, next) => {
                     return {
                         path: x,
                         id: x.split('_')[0],
-                        filename: x.split('_')[1]
+                        filename: x.split('_')[1],
+                        content: ''
                     }
                 })];
             }

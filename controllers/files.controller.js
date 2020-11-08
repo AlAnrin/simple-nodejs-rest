@@ -22,13 +22,13 @@ class FilesController {
     }
 
     async createFile(req, res){
-        if(req.body.file && req.body.file.id){
-            if(req.files.hasOwnProperty(req.body.file.id))
-                return res.status(409).send({message: 'File already exists.'});
+        if(req.query.dir){
+            const dir = req.directories.find(x => x.id === req.query.dir);
+            if(!dir)
+                return res.status(404).send({message: 'Error while find directory'});
 
-            req.files[req.body.file.id] = req.body.file;
-
-            let result = await FilesService.createFile(req.files);
+            const new_id = +dir.files[dir.files.length - 1].id + 1;
+            let result = await FilesService.createFile(dir, new_id);
 
             if(result)
                 return res.status(200).send(result);
@@ -56,20 +56,25 @@ class FilesController {
     }
 
     async deleteFile(req, res){
-        if(req.query.id){
-            if(req.files.hasOwnProperty(req.query.id)){
-                delete req.files[req.query.id];
+        if(req.query.dir) {
+            const dir = req.directories.find(x => x.id === req.query.dir);
+            if(!dir)
+                return res.status(404).send({message: 'Error while find directory'});
 
-                let result = await FilesService.deleteFile(req.file);
+            if (req.query.id) {
+                const file = dir.files.find(x => x.id === req.query.id);
+                if (file) {
+                    let result = await FilesService.deleteFile(dir, file);
 
-                if(result)
-                    return res.status(200).send(result);
-                else
-                    return res.status(500).send({message: 'Unable delete file.'});
-            } else
-                return res.status(404).send({message: 'file not found.'});
-        }else
-            return res.status(400).send({message: 'Bad request.'});
+                    if (result)
+                        return res.status(200).send(result);
+                    else
+                        return res.status(500).send({message: 'Unable delete file.'});
+                } else
+                    return res.status(404).send({message: 'file not found.'});
+            }
+        }
+        return res.status(400).send({message: 'Bad request.'});
     }
 }
 
