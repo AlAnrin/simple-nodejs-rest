@@ -39,7 +39,35 @@ class FilesController {
     }
 
     async updateFile(req, res){
+        if (req.user && req.directories) {
+            if (req.query.dir) {
+                const dir = req.directories.find(x => x.id === req.query.dir);
+                if (req.query.id) {
+                    const file = dir.files.find(x => x.id === req.query.id);
+                    if (req.body.name) {
+                        let result = await FilesService.renameFile(dir, file, req.body.name)
 
+                        if(result)
+                            return res.status(200).send(result);
+                        else
+                            return res.status(500).send({message: 'Unable rename file.'});
+                    }
+                    else if (req.body.content) {
+                        let result = await FilesService.updateFile(dir, file, req.body.content)
+
+                        if(result)
+                            return res.status(200).send(result);
+                        else
+                            return res.status(500).send({message: 'Unable update file.'});
+                    }
+                }
+                else
+                    return res.status(400).send({message: 'Bad request - id not found'});
+            }
+            else
+                return res.status(400).send({message: 'Bad request - directory not found'});
+        }
+        return res.status(400).send({message: 'Bad request.'});
     }
 
     async deleteFile(req, res){

@@ -12,10 +12,14 @@ router.use(ash(async (req, res, next) => {
             for (let fol of req.directories) {
                 const files = await FilesService.getFiles(`${folder}/${fol.path}`);
                 fol.files = [...files.map(x => {
+                    const nameArr = x.split('_');
+                    nameArr.splice(0, 1);
+                    const arr = nameArr.join('_').split('.');
+                    if (arr[arr.length - 1] === 'txt') arr.length = arr.length - 1;
                     return {
                         path: x,
                         id: x.split('_')[0],
-                        filename: x.split('_')[1],
+                        filename: arr.join('.'),
                         content: ''
                     }
                 })];

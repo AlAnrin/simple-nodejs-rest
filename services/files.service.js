@@ -29,14 +29,26 @@ class FilesService{
         });
     }
 
-    updateFile(data){
+    updateFile(dir, file, content) {
         return new Promise((res, rej) => {
-            fs.writeFile('assets/files/data.json', JSON.stringify(data), (err, response) => {
-                if(err)
+            fs.writeFile(`${dir.full}/${dir.path}/${file.path}`, content, 'utf8', err => {
+                if (err)
                     return res(false);
 
-                return res({message: 'User updated.'});
+                return res({message: 'File rewrite.'});
             });
+        });
+    }
+
+    renameFile(dir, file, name){
+        return new Promise((res, rej) => {
+                fs.rename(`${dir.full}/${dir.path}/${file.path}`,
+                    `${dir.full}/${dir.path}/${file.id}_${name}.txt`, (err, response) => {
+                    if(err)
+                        return res(false);
+
+                    return res({message: 'File renamed.'});
+                });
         });
     }
 

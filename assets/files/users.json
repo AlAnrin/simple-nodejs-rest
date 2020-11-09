@@ -1,5 +1,11 @@
 [
   {
+    "id": 0,
+    "fio": "Гостевой",
+    "login": "guest",
+    "password": "guest"
+  },
+  {
     "id": 1,
     "fio": "Иванов Иван Иванович",
     "login": "user1",
