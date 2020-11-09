@@ -47,7 +47,19 @@ class DirsController {
                 return res.status(404).send({message: 'Error while find directory'});
 
             try {
-                fs.rmdirSync(`${dir.full}/${dir.path}`, { recursive: true });
+                const path =`${dir.full}/${dir.path}`;
+                const ver = process.version.split('.')[0].split('');
+                ver.splice(0, 1);
+                const verStr = ver.join('')
+                if (+verStr < 12) {
+                    if (fs.existsSync(path)) {
+                        fs.readdirSync(path).forEach((file, index) => {
+                            fs.unlinkSync(`${path}/${file}`);
+                        });
+                        fs.rmdirSync(path);
+                    }
+                }
+                else fs.rmdirSync(path, { recursive: true });
                 return res.status(200).send({message: 'Directory deleted.'});
             } catch (e) {
                 return res.status(404).send({message: 'directory not found.'});
