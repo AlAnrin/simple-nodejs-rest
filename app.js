@@ -58,6 +58,6 @@ app.post('/api/auth', (req, res) => {
 
 app.use('/api', routes);
 
-const server = app.listen(port, host, () => console.log(`Server listens http://${host}:${port}`));
+const server = app.listen(process.env.PORT || port, host, () => console.log(`Server listens http://${host}:${port}`));
 
 server.keepAliveTimeout = 30000;
