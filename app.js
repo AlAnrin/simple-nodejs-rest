@@ -4,7 +4,8 @@ const express = require('express'),
     bodyParser = require('body-parser'),
     routes = require('./routes/index'),
     crypto = require('crypto'),
-    users = require('./assets/files/users');
+    users = require('./assets/files/users'),
+    helmet = require('helmet');
 
 const host = '127.0.0.1';
 const port = 7000;
@@ -16,6 +17,7 @@ var corsOptions = {
 
 const tokenKey = '1a2b-3c4d-5e6f-7g8h';
 
+app.use(helmet());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
